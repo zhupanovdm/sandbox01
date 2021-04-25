@@ -11,11 +11,8 @@ public class SelectionSorter {
                 if (comparator.compare(data[j], data[max]) > 0)
                     max = j;
             }
-            if (max != i) {
-                T value = data[i];
-                data[i] = data[max];
-                data[max] = value;
-            }
+            if (max != i)
+                ArrayUtils.swap(data, i, max);
         }
     }
 

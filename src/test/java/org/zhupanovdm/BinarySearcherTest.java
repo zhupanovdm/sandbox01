@@ -64,15 +64,4 @@ class BinarySearcherTest {
         assertEquals(-1, searcher.search(4));
     }
 
-    @Test
-    public void testBounds() {
-        BinarySearcher<Integer> searcher = new BinarySearcher<>(new Integer[] { 0, 1, 5, 5, 5, 5, 6, 7, 8, 9 });
-        assertNull(searcher.searchBounds(-1));
-        assertArrayEquals(new int[] { 0, 0 }, searcher.searchBounds(0));
-        assertArrayEquals(new int[] { 2, 5 }, searcher.searchBounds(5));
-        assertArrayEquals(new int[] { 8, 8 }, searcher.searchBounds(8));
-        assertArrayEquals(new int[] { 9, 9 }, searcher.searchBounds(9));
-        assertNull(searcher.searchBounds(10));
-    }
-
 }

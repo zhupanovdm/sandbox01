@@ -16,7 +16,7 @@ class SelectionSorterTest {
         SelectionSorter.sort(data, Integer::compareTo);
 
         for (int i = 1; i < data.length; i++)
-            assertTrue(data[i - 1] > data[i]);
+            assertTrue(data[i - 1] >= data[i]);
 
     }
 
@@ -29,7 +29,7 @@ class SelectionSorterTest {
         SelectionSorter.sort(data, (i1, i2) -> -Integer.compare(i1, i2));
 
         for (int i = 1; i < data.length; i++)
-            assertTrue(data[i - 1] < data[i]);
+            assertTrue(data[i - 1] <= data[i]);
 
     }
 

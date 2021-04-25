@@ -12,12 +12,9 @@ public class BinarySearcher<T extends Comparable<T>> {
         int high = data.length - 1;
         while (low <= high) {
             int i = low + (high - low) / 2;
-            T v = data[i];
-
-            int result = value.compareTo(v);
-            if (result == 0) {
+            int result = value.compareTo(data[i]);
+            if (result == 0)
                 return i;
-            }
 
             if (result > 0) {
                 low = i + 1;

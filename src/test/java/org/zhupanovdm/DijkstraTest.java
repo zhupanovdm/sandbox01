@@ -10,16 +10,17 @@ class DijkstraTest {
 
     @Test
     public void testBasic() {
-        WeightedGraph<String, Integer> graph = new WeightedGraph<String, Integer>()
-                .edge("START", "A", 6)
-                .edge("START", "B", 2)
-                .edge("A", "END", 1)
-                .edge("B", "A", 3)
-                .edge("B", "END", 5);
+        Graph<String, Graph.WeightedEdge<String, Double>> graph = new Graph.WeightedRouteBuilder<String, Double>()
+                .from("START").through("B", 2d).to("A", 3d).to("END", 5d)
+                .from("START").through("A", 6d).to("END", 1d)
+                .getGraph();
 
         Dijkstra<String> dijkstra = new Dijkstra<>(graph);
         List<Dijkstra.Transition<String>> result = dijkstra.calc("START", "END");
-        assertEquals(new Dijkstra.Transition<>("A", "END", 6), result.get(3));
+        for (Dijkstra.Transition<String> transition : result)
+            System.out.println(transition);
+
+        assertEquals(new Dijkstra.Transition<>("END", "A", 6d), result.get(2));
     }
 
 }

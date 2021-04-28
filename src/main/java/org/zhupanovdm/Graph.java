@@ -1,8 +1,6 @@
 package org.zhupanovdm;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.*;
 
@@ -143,6 +141,43 @@ public class Graph<N, E extends Graph.AbstractEdge<N, E>> {
         public GraphBuilder<N> to(N node) {
             graph.add(source, new Edge<>(graph, node));
             return this;
+        }
+    }
+
+    @Data
+    @NoArgsConstructor
+    public static class Transition<V> {
+        protected V destination;
+        protected V origin;
+
+        public Transition(V destination, V origin) {
+            this.destination = destination;
+            this.origin = origin;
+        }
+
+        @Override
+        public String toString() {
+            if (origin == null)
+                return String.format("%s", destination);
+            return String.format("%s >> %s", origin, destination);
+        }
+    }
+
+    @Data
+    @EqualsAndHashCode(callSuper = true)
+    public static class EvaluatedTransition<V, W> extends Transition<V> {
+        protected W cost;
+
+        public EvaluatedTransition(V destination, V origin, W cost) {
+            super(destination, origin);
+            this.cost = cost;
+        }
+
+        @Override
+        public String toString() {
+            if (origin == null)
+                return String.format("%s", destination);
+            return String.format("%s >> %s: %s", origin, destination, cost);
         }
     }
 

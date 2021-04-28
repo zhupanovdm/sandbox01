@@ -16,11 +16,11 @@ class DijkstraTest {
                 .getGraph();
 
         Dijkstra<String> dijkstra = new Dijkstra<>(graph);
-        List<Dijkstra.Transition<String>> result = dijkstra.calc("START", "END");
-        for (Dijkstra.Transition<String> transition : result)
+        List<Graph.EvaluatedTransition<String, Double>> result = dijkstra.calc("START", "END");
+        for (Graph.EvaluatedTransition<String, Double> transition : result)
             System.out.println(transition);
 
-        assertEquals(new Dijkstra.Transition<>("END", "A", 6d), result.get(2));
+        assertEquals(new Graph.EvaluatedTransition<>("END", "A", 6d), result.get(2));
     }
 
 }

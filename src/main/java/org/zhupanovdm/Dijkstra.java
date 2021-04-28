@@ -1,6 +1,8 @@
 package org.zhupanovdm;
 
-import org.zhupanovdm.Graph.WeightedEdge;
+import org.zhupanovdm.graph.EvaluatedTransition;
+import org.zhupanovdm.graph.Graph;
+import org.zhupanovdm.graph.WeightedEdge;
 
 import java.util.*;
 
@@ -11,19 +13,19 @@ public class Dijkstra<T> {
         this.graph = graph;
     }
 
-    public List<Graph.EvaluatedTransition<T, Double>> calc(T src, T dest) {
-        List<Graph.EvaluatedTransition<T, Double>> result = new LinkedList<>();
+    public List<EvaluatedTransition<T, Double>> calc(T src, T dest) {
+        List<EvaluatedTransition<T, Double>> result = new LinkedList<>();
         calc(src, dest, new HashMap<>(), new HashSet<>(), result);
         return result;
     }
 
     private void calc(T node, T destination,
-                      Map<T, Graph.EvaluatedTransition<T, Double>> transitions,
+                      Map<T, EvaluatedTransition<T, Double>> transitions,
                       Set<T> discovered,
-                      List<Graph.EvaluatedTransition<T, Double>> result) {
+                      List<EvaluatedTransition<T, Double>> result) {
 
         double spent = 0;
-        Graph.EvaluatedTransition<T, Double> transition = transitions.get(node);
+        EvaluatedTransition<T, Double> transition = transitions.get(node);
         if (transition != null) {
             result.add(transition);
             spent = transition.getCost();
@@ -37,9 +39,9 @@ public class Dijkstra<T> {
             Set<WeightedEdge<T, Double>> edges = graph.edgesOf(node);
             for (WeightedEdge<T, Double> neighbour : edges) {
                 double cost = spent + neighbour.getWeight();
-                Graph.EvaluatedTransition<T, Double> next = transitions.computeIfAbsent(neighbour.node(), t -> {
+                EvaluatedTransition<T, Double> next = transitions.computeIfAbsent(neighbour.node(), t -> {
                     discovered.add(t);
-                    return new Graph.EvaluatedTransition<>(t, node, cost);
+                    return new EvaluatedTransition<>(t, node, cost);
                 });
 
                 if (next.getCost() > cost) {
@@ -52,7 +54,7 @@ public class Dijkstra<T> {
         T shortest = null;
         double min = Double.MAX_VALUE;
         for (T current : discovered) {
-            Graph.EvaluatedTransition<T, Double> next = transitions.get(current);
+            EvaluatedTransition<T, Double> next = transitions.get(current);
             double cost = next == null ? 0 : next.getCost();
             if (min >= cost) {
                 shortest = current;

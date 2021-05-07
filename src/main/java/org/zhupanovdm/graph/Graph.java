@@ -8,6 +8,8 @@ public class Graph<N, E extends AbstractEdge<N, E>> {
     public void add(N from, E edge) {
         Set<E> edges = data.computeIfAbsent(from, n -> new HashSet<>());
         edges.remove(edge);
+
+        edge.setSource(from);
         edges.add(edge);
     }
 
@@ -15,20 +17,20 @@ public class Graph<N, E extends AbstractEdge<N, E>> {
         return Collections.unmodifiableSet(data.getOrDefault(node, Collections.emptySet()));
     }
 
-    public static class Basic<T> extends Graph<T, Edge<T>> {
+    public Set<N> nodes() {
+        return Collections.unmodifiableSet(data.keySet());
+    }
 
+    public static class Basic<T> extends Graph<T, Edge<T>> {
         public RouteBuilder<T> from(T node) {
             return new RouteBuilder<>(this, node);
         }
-
     }
 
     public static class Weighted<T, W extends Comparable<W>> extends Graph<T, WeightedEdge<T, W>> {
-
         public WeightedRouteBuilder<T, W> from(T node) {
             return new WeightedRouteBuilder<>(this, node);
         }
-
     }
 
 }

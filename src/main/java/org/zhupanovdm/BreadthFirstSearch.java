@@ -29,8 +29,8 @@ public class BreadthFirstSearch<T> {
 
             checked.add(current);
             for (Edge<T> edge : graph.edgesOf(current)) {
-                if (!checked.contains(edge.node()))
-                    queue.add(edge.node());
+                if (!checked.contains(edge.destination()))
+                    queue.add(edge.destination());
             }
         }
 

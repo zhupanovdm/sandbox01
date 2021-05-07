@@ -16,6 +16,11 @@ public class WeightedEdge<N, W extends Comparable<W>>
         this.weight = weight;
     }
 
+    public WeightedEdge<N, W> withWeight(W weight) {
+        this.weight = weight;
+        return this;
+    }
+
     @Override
     public WeightedEdge<N, W> clone() {
         try {
@@ -31,4 +36,8 @@ public class WeightedEdge<N, W extends Comparable<W>>
         return weight.compareTo(o);
     }
 
+    @Override
+    public String toString() {
+        return source + " >> " + destination + " (" + weight + ')';
+    }
 }

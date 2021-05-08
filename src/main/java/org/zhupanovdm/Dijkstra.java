@@ -20,24 +20,24 @@ public class Dijkstra<T> extends PathFinder.Int<T> {
     private void calc(T node, Set<T> discovered) {
         discovered.remove(node);
 
-        int spent = costs.getOrDefault(node, zero);
+        Integer spent = costs.getOrDefault(node, zero);
         for (Map.Entry<T, Integer> edge : graph.edgesOf(node).entrySet()) {
-            int newCost = add.apply(spent, edge.getValue());
-            int cost = costs.computeIfAbsent(edge.getKey(), t -> {
+            Integer newCost = add.apply(spent, edge.getValue());
+            Integer cost = costs.computeIfAbsent(edge.getKey(), t -> {
                 discovered.add(t);
                 return infinity;
             });
-            if (cost > newCost) {
+            if (cost.compareTo(newCost) > 0) {
                 costs.put(edge.getKey(), newCost);
                 origins.put(edge.getKey(), node);
             }
         }
 
         T shortest = null;
-        int min = infinity;
+        Integer min = infinity;
         for (T current : discovered) {
-            int cost = costs.getOrDefault(current, zero);
-            if (min > cost) {
+            Integer cost = costs.getOrDefault(current, zero);
+            if (min.compareTo(cost) > 0) {
                 shortest = current;
                 min = cost;
             }

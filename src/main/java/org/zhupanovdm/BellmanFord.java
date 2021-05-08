@@ -18,10 +18,10 @@ public class BellmanFord<T> extends PathFinder.Int<T> {
         graph.forEachEdge((edge, weight) -> {
             edges.add(edge);
             weights.add(weight);
-            costs.putIfAbsent(edge[0], Integer.MAX_VALUE);
-            costs.putIfAbsent(edge[1], Integer.MAX_VALUE);
+            costs.putIfAbsent(edge[0], infinity);
+            costs.putIfAbsent(edge[1], infinity);
         });
-        costs.put(from, 0);
+        costs.put(from, zero);
 
         int size = costs.keySet().size();
         for (int i = 0; i < size - 1; i++) {
@@ -30,10 +30,10 @@ public class BellmanFord<T> extends PathFinder.Int<T> {
                 T dest = edges.get(j)[1];
                 Integer weight = weights.get(j);
                 Integer cost = costs.get(src);
-                if (cost < Integer.MAX_VALUE) {
+                if (cost < infinity) {
                     Integer current = costs.get(dest);
-                    if (current > cost + weight) {
-                        costs.put(dest, cost + weight);
+                    if (current.compareTo(add.apply(cost, weight)) > 0) {
+                        costs.put(dest, add.apply(cost, weight));
                         origins.put(dest, src);
                     }
                 }

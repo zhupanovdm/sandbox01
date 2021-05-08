@@ -14,7 +14,7 @@ class DijkstraTest {
                 .from("START").through("A", 6).to("END", 1)
                 .getGraph();
 
-        Dijkstra<String, Integer> dijkstra = Dijkstra.forInt(graph).calcFrom("START").printTo("END");
+        PathFinder<String, Integer> dijkstra = new Dijkstra<>(graph).calcFrom("START").printTo("END");
         assertEquals(6, dijkstra.getCosts().get("END"));
     }
 

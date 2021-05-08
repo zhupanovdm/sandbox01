@@ -21,20 +21,27 @@ public class BellmanFord<T> extends PathFinder.Int<T> {
             costs.putIfAbsent(edge[0], infinity);
             costs.putIfAbsent(edge[1], infinity);
         });
+
         costs.put(from, zero);
 
-        int size = costs.keySet().size();
-        for (int i = 0; i < size - 1; i++) {
+        int n = costs.keySet().size();
+        boolean modified = true;
+        for (int i = 1; modified; i++) {
+            if (i == n)
+                throw new IllegalStateException("Negative cycle detected");
+
+            modified = false;
             for (int j = 0; j < edges.size(); j++) {
                 T src = edges.get(j)[0];
                 T dest = edges.get(j)[1];
                 Integer weight = weights.get(j);
-                Integer cost = costs.get(src);
+                Integer cost = costs.getOrDefault(src, infinity);
                 if (cost < infinity) {
-                    Integer current = costs.get(dest);
+                    Integer current = costs.getOrDefault(dest, infinity);
                     if (current.compareTo(add.apply(cost, weight)) > 0) {
                         costs.put(dest, add.apply(cost, weight));
                         origins.put(dest, src);
+                        modified = true;
                     }
                 }
             }

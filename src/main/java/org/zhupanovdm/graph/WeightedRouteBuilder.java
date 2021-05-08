@@ -2,20 +2,20 @@ package org.zhupanovdm.graph;
 
 import lombok.Getter;
 
-public class WeightedRouteBuilder<N, W extends Comparable<W>> {
+public class WeightedRouteBuilder<N, W> {
     @Getter
-    private final Graph.Weighted<N, W> graph;
+    private final WeightedDirectedGraph<N, W> graph;
     private final N source;
 
     public WeightedRouteBuilder() {
-        this(new Graph.Weighted<>(), null);
+        this(new WeightedDirectedGraph<>(), null);
     }
 
-    public WeightedRouteBuilder(Graph.Weighted<N, W> graph) {
+    public WeightedRouteBuilder(WeightedDirectedGraph<N, W> graph) {
         this(graph, null);
     }
 
-    public WeightedRouteBuilder(Graph.Weighted<N, W> graph, N source) {
+    public WeightedRouteBuilder(WeightedDirectedGraph<N, W> graph, N source) {
         this.graph = graph;
         this.source = source;
     }
@@ -25,13 +25,12 @@ public class WeightedRouteBuilder<N, W extends Comparable<W>> {
     }
 
     public WeightedRouteBuilder<N, W> through(N node, W weight) {
-        WeightedEdge<N, W> edge = new WeightedEdge<>(graph, node, weight);
-        graph.add(source, edge);
+        graph.addEdge(source, node, weight);
         return from(node);
     }
 
     public WeightedRouteBuilder<N, W> to(N node, W weight) {
-        graph.add(source, new WeightedEdge<>(graph, node, weight));
+        graph.addEdge(source, node, weight);
         return this;
     }
 }

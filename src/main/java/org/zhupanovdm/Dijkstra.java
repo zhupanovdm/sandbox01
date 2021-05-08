@@ -1,69 +1,98 @@
 package org.zhupanovdm;
 
-import org.zhupanovdm.graph.Graph;
-import org.zhupanovdm.graph.WeightedEdge;
+import lombok.Getter;
+import org.zhupanovdm.graph.WeightedDirectedGraph;
 
 import java.util.*;
+import java.util.function.BiFunction;
 
-public class Dijkstra<T> {
-    private final Graph<T, WeightedEdge<T, Double>> graph;
+public class Dijkstra<T, W extends Comparable<W>> {
+    private final WeightedDirectedGraph<T, W> graph;
+    private final Map<T, W> costs = new HashMap<>();
+    private final Map<T, T> origins = new HashMap<>();
+    private final BiFunction<W, W, W> add;
+    private final BiFunction<W, W, W> sub;
+    private final W zero;
+    private final W infinity;
 
-    public Dijkstra(Graph<T, WeightedEdge<T, Double>> graph) {
+    private Dijkstra(WeightedDirectedGraph<T, W> graph,
+                    BiFunction<W, W, W> add,
+                    BiFunction<W, W, W> sub,
+                    W zero, W infinity) {
         this.graph = graph;
+        this.add = add;
+        this.sub = sub;
+        this.zero = zero;
+        this.infinity = infinity;
     }
 
-    public Map<T, WeightedEdge<T, Double>> calc(T src) {
-        Map<T, WeightedEdge<T, Double>> table = new HashMap<>();
-        calc(src, table, new HashSet<>());
-        return table;
+    public Dijkstra<T, W> calcFrom(T src) {
+        costs.clear();
+        origins.clear();
+        calc(src, new HashSet<>());
+        return this;
     }
 
-    private void calc(T node, Map<T, WeightedEdge<T, Double>> table, Set<T> discovered) {
-        double spent = 0;
-        WeightedEdge<T, Double> edge = table.get(node);
-        if (edge != null) {
-            spent = edge.getWeight();
+    public Dijkstra<T, W> printTo(T to) {
+        print(to);
+        return this;
+    }
+
+    private W print(T to) {
+        T from = origins.get(to);
+        if (from == null) {
+            System.out.printf("%s%n", to);
+            return zero;
         }
 
+        W spent = print(from);
+        W cost = costs.getOrDefault(to, zero);
+        System.out.printf("%s: %s%n", to, sub.apply(cost, spent));
+        return cost;
+    }
+
+
+    public Map<T, W> getCosts() {
+        return Collections.unmodifiableMap(costs);
+    }
+
+    public Map<T, T> getOrigins() {
+        return Collections.unmodifiableMap(origins);
+    }
+
+    private void calc(T node, Set<T> discovered) {
         discovered.remove(node);
 
-        Set<WeightedEdge<T, Double>> edges = graph.edgesOf(node);
-        for (WeightedEdge<T, Double> neighbour : edges) {
-            double cost = spent + neighbour.getWeight();
-            WeightedEdge<T, Double> next = table.computeIfAbsent(neighbour.destination(), t -> {
+        W spent = costs.getOrDefault(node, zero);
+        for (Map.Entry<T, W> edge : graph.edgesOf(node).entrySet()) {
+            W newCost = add.apply(spent, edge.getValue());
+            W cost = costs.computeIfAbsent(edge.getKey(), t -> {
                 discovered.add(t);
-                return neighbour.clone().withWeight(cost);
+                return infinity;
             });
 
-            if (next.compareTo(cost) > 0)
-                next.withWeight(cost).setSource(node);
+            if (cost.compareTo(newCost) > 0) {
+                costs.put(edge.getKey(), newCost);
+                origins.put(edge.getKey(), node);
+            }
         }
 
         T shortest = null;
-        double min = Double.MAX_VALUE;
+        W min = infinity;
         for (T current : discovered) {
-            WeightedEdge<T, Double> next = table.get(current);
-            double cost = next == null ? 0 : next.getWeight();
-            if (min >= cost) {
+            W cost = costs.getOrDefault(current, zero);
+            if (min.compareTo(cost) > 0) {
                 shortest = current;
                 min = cost;
             }
         }
 
         if (shortest != null)
-            calc(shortest, table, discovered);
+            calc(shortest, discovered);
     }
 
-    public static <T> double print(Map<T, WeightedEdge<T, Double>> table, T to) {
-        WeightedEdge<T, Double> edge = table.get(to);
-        if (edge == null) {
-            System.out.printf("%s%n", to);
-            return 0;
-        }
-
-        double cost = print(table, edge.source());
-        System.out.printf("%s: %f%n", to, edge.getWeight() - cost);
-        return edge.getWeight();
+    public static <T> Dijkstra<T, Integer> forInt(WeightedDirectedGraph<T, Integer> graph) {
+        return new Dijkstra<>(graph, Integer::sum, (l, r) -> l - r, 0, Integer.MAX_VALUE);
     }
 
 }

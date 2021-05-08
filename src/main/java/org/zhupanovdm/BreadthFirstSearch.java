@@ -1,7 +1,6 @@
 package org.zhupanovdm;
 
-import org.zhupanovdm.graph.Edge;
-import org.zhupanovdm.graph.Graph;
+import org.zhupanovdm.graph.WeightedDirectedGraph;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -10,9 +9,9 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 public class BreadthFirstSearch<T> {
-    private final Graph<T, Edge<T>> graph;
+    private final WeightedDirectedGraph<T, Integer> graph;
 
-    public BreadthFirstSearch(Graph<T, Edge<T>> graph) {
+    public BreadthFirstSearch(WeightedDirectedGraph<T, Integer> graph) {
         this.graph = graph;
     }
 
@@ -28,9 +27,9 @@ public class BreadthFirstSearch<T> {
                 return current;
 
             checked.add(current);
-            for (Edge<T> edge : graph.edgesOf(current)) {
-                if (!checked.contains(edge.destination()))
-                    queue.add(edge.destination());
+            for (T node : graph.edgesOf(current).keySet()) {
+                if (!checked.contains(node))
+                    queue.add(node);
             }
         }
 

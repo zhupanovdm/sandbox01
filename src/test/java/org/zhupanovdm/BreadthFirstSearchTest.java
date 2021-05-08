@@ -1,7 +1,7 @@
 package org.zhupanovdm;
 
 import org.junit.jupiter.api.Test;
-import org.zhupanovdm.graph.Graph;
+import org.zhupanovdm.graph.WeightedDirectedGraph;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -9,12 +9,12 @@ class BreadthFirstSearchTest {
 
     @Test
     public void testBasic() {
-        Graph.Basic<String> graph = new Graph.Basic<String>()
-                .from("me").through("Bob").to("Anuj")
-                .from("me").through("Alice").to("Peggy")
-                .from("Bob").to("Peggy")
-                .from("me").through("Claire").to("Tom")
-                .from("Claire").to("John")
+        WeightedDirectedGraph<String, Integer> graph = new WeightedDirectedGraph<String, Integer>()
+                .from("me").through("Bob", 1).to("Anuj", 1)
+                .from("me").through("Alice", 1).to("Peggy", 1)
+                .from("Bob").to("Peggy", 1)
+                .from("me").through("Claire", 1).to("Tom", 1)
+                .from("Claire").to("John", 1)
                 .getGraph();
 
         BreadthFirstSearch<String> bws = new BreadthFirstSearch<>(graph);

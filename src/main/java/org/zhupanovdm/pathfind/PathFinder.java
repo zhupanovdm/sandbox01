@@ -1,4 +1,4 @@
-package org.zhupanovdm;
+package org.zhupanovdm.pathfind;
 
 import org.zhupanovdm.graph.WeightedDirectedGraph;
 

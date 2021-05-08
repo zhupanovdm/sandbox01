@@ -2,6 +2,8 @@ package org.zhupanovdm;
 
 import org.junit.jupiter.api.Test;
 import org.zhupanovdm.graph.WeightedDirectedGraph;
+import org.zhupanovdm.pathfind.Dijkstra;
+import org.zhupanovdm.pathfind.PathFinder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

@@ -1,9 +1,7 @@
-package org.zhupanovdm;
+package org.zhupanovdm.pathfind;
 
 import org.junit.jupiter.api.Test;
 import org.zhupanovdm.graph.WeightedDirectedGraph;
-import org.zhupanovdm.pathfind.BellmanFord;
-import org.zhupanovdm.pathfind.PathFinder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

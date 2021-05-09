@@ -1,9 +1,8 @@
 package org.zhupanovdm;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
+import lombok.EqualsAndHashCode;
+
+import java.util.*;
 
 public class Schedule<T extends Comparable<T>> {
     OrderingListWrapper<Item<T>> items = new OrderingListWrapper<>(new ArrayList<>(), Comparator.comparing(o -> o.begin));
@@ -22,9 +21,14 @@ public class Schedule<T extends Comparable<T>> {
             result.add(item);
             i = ListUtils.closestIndex(list, item, (l, r) -> l.end.compareTo(r.begin));
         }
-        return result;
+        return Collections.unmodifiableList(result);
     }
 
+    public List<Item<T>> getTasks() {
+        return Collections.unmodifiableList(items.getList());
+    }
+
+    @EqualsAndHashCode(of = { "begin", "end" })
     public static class Item<T extends Comparable<T>> {
         public final T begin;
         public final T end;

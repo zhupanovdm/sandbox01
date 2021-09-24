@@ -2,4 +2,4 @@
 
 Sandbox v 0.1
 
-My sketch book of common algorithms
+My sandbox (common algorithms)
